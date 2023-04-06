@@ -1,3 +1,8 @@
+/*
+Coded by Genia Druzhinina
+04/03/2023
+*/
+
 package usc_mealmatch;
 
 public class UserAuthenticator {
