@@ -1,3 +1,8 @@
+/*
+Coded by Genia Druzhinina
+04/03/2023
+*/
+
 DROP DATABASE IF EXISTS usc_mealmatch;
 CREATE DATABASE usc_mealmatch;
 USE usc_mealmatch;
