@@ -58,9 +58,13 @@ public class UserAuthenticator {
 					preparedStatement.setString(1, email);
 					preparedStatement.setString(2, password);
 
-					resultSet = preparedStatement.executeQuery();
+					int count = preparedStatement.executeUpdate();
 
-					return true;
+					if (count > 0) {
+						return true;
+					} else {
+						return false;
+					}
 				} catch (SQLException e) {
 					System.out.println(e.getMessage());
 					return false;

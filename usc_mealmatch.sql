@@ -48,13 +48,13 @@ CREATE TABLE ratings (
 	rating_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
 	dining_hall_id INT NOT NULL,
     user_id INT NOT NULL,
-    date_added VARCHAR(10), /*MM/DD/YYYY, date was an unavailable variable*/
+    date_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, /*MM/DD/YYYY, date was an unavailable variable*/
     rating_given INT NOT NULL,
     FOREIGN KEY fk1(dining_hall_id) REFERENCES dining_halls(dining_hall_id),
     FOREIGN KEY fk2(user_id) REFERENCES auth(user_id)
 );
 INSERT INTO ratings (rating_id, dining_hall_id, user_id, date_added, rating_given)
-	VALUES (0099887766, 0987654321, 1234567890, '01/01/1999', 5);
+	VALUES (0099887766, 0987654321, 1234567890, CURRENT_TIME(), 5);
 
 SELECT * FROM auth;
 SELECT * FROM dining_halls;
