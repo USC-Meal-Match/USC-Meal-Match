@@ -36,6 +36,6 @@ try:
 	connection.commit()
 	cursor.close()
 	
-finally:
+finally: #close the connections
 	if connection.is_connected():
 		connection.close()
