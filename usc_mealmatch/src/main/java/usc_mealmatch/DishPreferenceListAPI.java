@@ -21,23 +21,19 @@ public class DishPreferenceListAPI extends HttpServlet
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException 
 	{
 		resp.setContentType("application/json");
-		//BufferedReader in = req.getReader();
-		//String json = in.readLine();
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		DishPreferenceList curr = gson.fromJson(req.getReader(), DishPreferenceList.class);
+		UserProfile profile = UserProfile.getUserProfile(curr.getUserID());
 		
-		//todo: handle the dish preference list from the browser
+		//setting the user's dish preference list to the list curr acquired
 		//testing viablility of this API
-		if(curr.getSize() == 3)
+		if(profile.setPref(curr.getDishList()))
 		{
 			//setting status
 			resp.setStatus(200);
 			System.out.println("test case successful");
 			resp.setContentType("application/json");
-			PrintWriter pw = resp.getWriter();
 			System.out.println(curr.getDish(0));
-			pw.print("{\"XX\": \"Sup\"}");
-			pw.flush();
 		}
 		else
 		{
@@ -45,4 +41,20 @@ public class DishPreferenceListAPI extends HttpServlet
 			System.out.println("Test case failed");
 		}
 	}
+	
+	//sending the renewed dish preferrence list to the front end
+		@Override 
+		protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException 
+		{
+			System.out.println("sup");
+			resp.setContentType("application/json");
+			resp.setHeader("Access-Control-Allow-Origin: ", "*");
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			DishPreferenceList curr = gson.fromJson(req.getReader(), DishPreferenceList.class);
+			String anString = gson.toJson(curr.getDishList());
+			PrintWriter pWriter = resp.getWriter();
+			pWriter.print(anString);
+			pWriter.flush();
+			pWriter.close();
+		}
 }

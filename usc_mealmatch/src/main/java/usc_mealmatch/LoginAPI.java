@@ -21,8 +21,6 @@ public class LoginAPI extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		resp.setContentType("application/json");
-		System.out.println("hello");
 		BufferedReader in = req.getReader();
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		EmailPassword curr = gson.fromJson(in, EmailPassword.class);
@@ -35,6 +33,7 @@ public class LoginAPI extends HttpServlet {
 		if (UserAuthenticator.login(email, password)) {
 			// setting status
 			resp.setStatus(200);
+			resp.setHeader("Access-Control-Allow-Origin: ", "*");
 			System.out.println("test case successful");
 			resp.setContentType("application/json");
 			pw.print("{\"authenticated\": \"true\"}");

@@ -8,7 +8,7 @@ public class DishPreferenceList
 {
 	@SerializedName("DishPreference")
 	private ArrayList<String> DishPreference;
-	private String userID;//primary key of a user
+	private int userID;//primary key of a user
 	
 	public int getSize()
 	{
@@ -25,11 +25,16 @@ public class DishPreferenceList
 		return DishPreference.get(index);
 	}
 
-	public String getUserID() {
+	public int getUserID() {
 		return userID;
 	}
 
-	public void setUserID(String userID) {
+	public void setUserID(int userID) {
 		this.userID = userID;
+	}
+	
+	public ArrayList<String> getDishList()
+	{
+		return DishPreference;
 	}
 }
