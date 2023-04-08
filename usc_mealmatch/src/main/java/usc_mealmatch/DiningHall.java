@@ -9,15 +9,21 @@ import java.util.List;
 
 public class DiningHall {
 	private int diningHallID; // ID of the dining hall
+	private String name;
 	private List<MenuItem> menu; // menu of the dining hall
 
-	public DiningHall(int diningHallID, List<MenuItem> menu) { // initialize the dining hall
+	public DiningHall(int diningHallID, String name, List<MenuItem> menu) { // initialize the dining hall
 		this.diningHallID = diningHallID;
+		this.name = name;
 		this.menu = menu;
 	}
 
 	public int getDiningHallID() { // return the dining hall ID
 		return diningHallID;
+	}
+	
+	public String getName() {
+		return name;
 	}
 
 	public List<MenuItem> getMenu() { // return the menu

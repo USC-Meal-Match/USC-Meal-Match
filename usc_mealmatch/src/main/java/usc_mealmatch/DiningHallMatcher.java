@@ -5,7 +5,9 @@ Coded by Genia Druzhinina
 
 package usc_mealmatch;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DiningHallMatcher {
 	public int match(int userID) { //match the user to multiple dining halls
@@ -16,14 +18,14 @@ public class DiningHallMatcher {
 		// DIET RESTRICTIONS ARE IRRELEVANT
 		// List<String> dietRstr = user.getDietRstr();
 
-		Map<String, List<String>> diningHalls = new HashMap<String, List<String>>();
+		Map<String, List<String>> diningHallMap = new HashMap<String, List<String>>();
 
-		for (String diningHall : diningHalls.keySet())
+		for (String diningHall : diningHallMap .keySet())
 		{
 			int matches = 0;
-			for (String menu : diningHalls.get(diningHall))
+			for (String menu : diningHallMap .get(diningHall))
 			{
-				for (String preference : preferences)
+				for (String preference : preferences) {}
 			}
 		}
 		

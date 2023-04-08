@@ -29,7 +29,8 @@ public class Menus {
 						List<String> dietRstrs = Arrays.asList(resultSet.getString("diet_restrictions").split(","));
 
 						if (currDiningHall == null || currDiningHall.getDiningHallID() != diningHallID) {
-							currDiningHall = new DiningHall(diningHallID, new ArrayList<>());
+							String diningHallName = resultSet.getString("dining_hall_name");
+							currDiningHall = new DiningHall(diningHallID, diningHallName, new ArrayList<>());
 							menuList.add(currDiningHall);
 						}
 

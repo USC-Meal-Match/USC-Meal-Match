@@ -43,18 +43,18 @@ public class DishPreferenceListAPI extends HttpServlet
 	}
 	
 	//sending the renewed dish preferrence list to the front end
-		@Override 
-		protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException 
-		{
-			System.out.println("sup");
-			resp.setContentType("application/json");
-			resp.setHeader("Access-Control-Allow-Origin: ", "*");
-			Gson gson = new GsonBuilder().setPrettyPrinting().create();
-			DishPreferenceList curr = gson.fromJson(req.getReader(), DishPreferenceList.class);
-			String anString = gson.toJson(curr.getDishList());
-			PrintWriter pWriter = resp.getWriter();
-			pWriter.print(anString);
-			pWriter.flush();
-			pWriter.close();
-		}
+	@Override 
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException 
+	{
+		System.out.println("sup");
+		resp.setContentType("application/json");
+		resp.setHeader("Access-Control-Allow-Origin: ", "*");
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		DishPreferenceList curr = gson.fromJson(req.getReader(), DishPreferenceList.class);
+		String anString = gson.toJson(curr.getDishList());
+		PrintWriter pWriter = resp.getWriter();
+		pWriter.print(anString);
+		pWriter.flush();
+		pWriter.close();
+	}
 }

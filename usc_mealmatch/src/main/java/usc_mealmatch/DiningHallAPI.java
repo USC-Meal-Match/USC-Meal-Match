@@ -28,7 +28,7 @@ public class DiningHallAPI extends HttpServlet
 		
 		//todo: handle the dininghall info from the browser
 		//testing viablility of this API
-		if(curr.getDiningHallItem(0).getName().equals("Parkside Dining Hall"))
+		if(curr.getDiningHall(0).getName().equals("Parkside Dining Hall"))
 		{
 			//setting status
 			resp.setStatus(200);
@@ -36,7 +36,6 @@ public class DiningHallAPI extends HttpServlet
 			System.out.println(curr.getSize());
 			resp.setContentType("application/json");
 			PrintWriter pw = resp.getWriter();
-			System.out.println(curr.getDiningHallItem(1).getItem(2));
 			pw.print("{\"XX\": \"Sup\"}");
 			pw.flush();
 		}
