@@ -59,17 +59,14 @@ def crawl_menus(session, location):
             menu_allergen = []
             allergens = item.find_all('span', class_='fa-allergen-container')
             for allergen in allergens:
-                typeAllergen = allergen.find('span', class_=None)
-                if typeAllergen is not None:
+                typeAllergens = allergen.find_all('span', class_=None)
+                for typeAllergen in typeAllergens:
                     menu_allergen.append(typeAllergen.text)
 
             menus.append({
                 "name": menu_name,
                 "allergy": menu_allergen
             })
-
-
-
     return menus
 
 

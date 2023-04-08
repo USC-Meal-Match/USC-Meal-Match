@@ -32,6 +32,7 @@ public class DiningHallAPI extends HttpServlet
 		{
 			//setting status
 			resp.setStatus(200);
+			resp.setHeader("Access-Control-Allow-Origin: ", "*");
 			System.out.println(curr.getSize());
 			resp.setContentType("application/json");
 			PrintWriter pw = resp.getWriter();
