@@ -4,10 +4,9 @@ import java.util.ArrayList;
 
 import com.google.gson.annotations.SerializedName;
 
-public class DiningHallItem 
-{
+public class DiningHallItem {
 	private String name;
-	
+
 	@SerializedName("items")
 	private ArrayList<String> items;
 
@@ -18,20 +17,17 @@ public class DiningHallItem
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	public int getSize()
-	{
+
+	public int getSize() {
 		return items.size();
 	}
-	
-	public void addItem(String diet)
-	{
+
+	public void addItem(String diet) {
 		items.add(diet);
 	}
-	
-	public String getItem(int index)
-	{
+
+	public String getItem(int index) {
 		return items.get(index);
 	}
-	
+
 }

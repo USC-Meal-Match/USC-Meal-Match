@@ -1,28 +1,68 @@
 package usc_mealmatch;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import com.google.gson.annotations.SerializedName;
 
-
-public class Menus 
-{
+public class Menus {
 	@SerializedName("menus")
-	ArrayList<DiningHallItem> menus;
-	
-	public int getSize()
-	{
+	ArrayList<DiningHall> menus;
+
+	public static Menus getMenus() {
+		try {
+			Menus menus = DatabaseClient.useDatabase((connection, preparedStatement, resultSet) -> {
+				try {
+					preparedStatement = connection.prepareStatement(
+							"SELECT * FROM menu m JOIN dining_halls d ON m.dining_hall_id = d.dining_hall_id ORDER BY m.dining_hall_id");
+
+					resultSet = preparedStatement.executeQuery();
+
+					ArrayList<DiningHall> menuList = new ArrayList<>();
+
+					DiningHall currDiningHall = null;
+					while (resultSet.next()) {
+						String itemName = resultSet.getString("item_name");
+						int diningHallID = resultSet.getInt("dining_hall_id");
+						List<String> dietRstrs = Arrays.asList(resultSet.getString("diet_restrictions").split(","));
+
+						if (currDiningHall == null || currDiningHall.getDiningHallID() != diningHallID) {
+							currDiningHall = new DiningHall(diningHallID, new ArrayList<>());
+							menuList.add(currDiningHall);
+						}
+
+						currDiningHall.addToMenu(new MenuItem(itemName, dietRstrs));
+					}
+
+					return new Menus(menuList);
+				} catch (SQLException e) {
+					System.out.println(e.getMessage());
+					return null;
+				}
+			});
+
+			return menus;
+		} catch (SQLException e) {
+			return null;
+		}
+	}
+
+	public Menus(ArrayList<DiningHall> menus) {
+		this.menus = menus;
+	}
+
+	public int getSize() {
 		return menus.size();
 	}
-	
-	public void addDiningHallItem(DiningHallItem event)
-	{
+
+	public void addDiningHall(DiningHall event) {
 		menus.add(event);
 	}
-	
-	public DiningHallItem getDiningHallItem(int index)
-	{
+
+	public DiningHall getDiningHall(int index) {
 		return menus.get(index);
 	}
-		
+
 }
