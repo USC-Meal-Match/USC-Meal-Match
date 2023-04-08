@@ -12,6 +12,22 @@ public class DiningHallMatcher {
 		return 0;
 	}
 	public int computeDiningHall(UserProfile user, List<DiningHall> diningHalls) { //match the user to their best dining hall
+		List<String> preferences = user.getPref();
+		// DIET RESTRICTIONS ARE IRRELEVANT
+		// List<String> dietRstr = user.getDietRstr();
+
+		Map<String, List<String>> diningHalls = new HashMap<String, List<String>>();
+
+		for (String diningHall : diningHalls.keySet())
+		{
+			int matches = 0;
+			for (String menu : diningHalls.get(diningHall))
+			{
+				for (String preference : preferences)
+			}
+		}
+		
+		
 		return 0;
 	}
 }

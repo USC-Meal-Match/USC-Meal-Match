@@ -21,23 +21,34 @@ public class RatingAPI extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		resp.setContentType("application/json");
 		BufferedReader in = req.getReader();
-		String json = in.readLine();
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		Rating curr = gson.fromJson(json, Rating.class);
+		RatingInput curr = gson.fromJson(in, RatingInput.class);
 
 		// todo: handle the ratings we get from the website
 		// testing viablility of this API
-		if (Rating.setRating(0, 0, 0)) {
+		if (Rating.setRating(curr.getRating(), curr.getDininghaID(), curr.getUserID())) {
 			// setting status
 			resp.setStatus(200);
+			resp.setHeader("Access-Control-Allow-Origin: ", "*");
 			System.out.println("test case successful");
 			resp.setContentType("application/json");
-			PrintWriter pw = resp.getWriter();
-			pw.print("{\"Xu\": \"Sup\"}");
-			pw.flush();
 		} else {
 			resp.setStatus(400);
 			System.out.println("Test case failed");
 		}
+	}
+	
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException 
+	{
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		RatingInput curr = gson.fromJson(req.getReader(), RatingInput.class);
+		resp.setContentType("application/json");
+		resp.setHeader("Access-Control-Allow-Origin: ", "*");
+		String anString = Double.toString(Rating.getRating(curr.getDininghaID()));
+		PrintWriter pWriter = resp.getWriter();
+		pWriter.print(anString);
+		pWriter.flush();
+		pWriter.close();
 	}
 }

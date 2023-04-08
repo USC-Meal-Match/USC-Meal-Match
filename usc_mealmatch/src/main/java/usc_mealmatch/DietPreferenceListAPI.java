@@ -17,32 +17,26 @@ public class DietPreferenceListAPI extends HttpServlet
 {
 	
 	private static final long serialVersionUID = 1L;
-	private DietPreferenceList curr = new DietPreferenceList() ;
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException 
 	{
 		resp.setContentType("application/json");
-		//BufferedReader in = req.getReader();
-		//String json = in.readLine();
+		//getting user input from the browser
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		curr = gson.fromJson(req.getReader(), DietPreferenceList.class);
 		
-		//todo: handle the diet preference list from the browser
+		DietPreferenceList curr = gson.fromJson(req.getReader(), DietPreferenceList.class);
+		UserProfile profile = UserProfile.getUserProfile(curr.getUserID());
+		
+		//Setting the diet restriction to the list acquired by curr
 		//testing viablility of this API
-		if(curr.getSize() == 3)
+		if(profile.setDietRstr(curr.getDietList()))
 		{
 			//setting status
 			resp.setStatus(200);
 			System.out.println("test case successful");
 			resp.setContentType("application/json");
-			PrintWriter pw = resp.getWriter();
 			System.out.println(curr.getDiet(0));
-			String anString = "DietPreference:";
-			anString += gson.toJson(curr.getDietList());
-			pw.print(anString);
-			pw.flush();
-			pw.close();
 		}
 		else
 		{
@@ -57,7 +51,9 @@ public class DietPreferenceListAPI extends HttpServlet
 	{
 		System.out.println("sup");
 		resp.setContentType("application/json");
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		resp.setHeader("Access-Control-Allow-Origin: ", "*");
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();	
+		DietPreferenceList curr = gson.fromJson(req.getReader(), DietPreferenceList.class);
 		String anString = gson.toJson(curr.getDietList());
 		PrintWriter pWriter = resp.getWriter();
 		pWriter.print(anString);

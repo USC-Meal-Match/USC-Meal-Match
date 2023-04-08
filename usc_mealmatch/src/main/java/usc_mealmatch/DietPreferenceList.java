@@ -9,7 +9,7 @@ public class DietPreferenceList
 {
 	@SerializedName("DietPreference")
 	private ArrayList<String> DietPreference;
-	private String userID;
+	private int userID;
 	
 	public int getSize()
 	{
@@ -31,11 +31,11 @@ public class DietPreferenceList
 		return DietPreference;
 	}
 
-	public String getUserID() {
+	public int getUserID() {
 		return userID;
 	}
 
-	public void setUserID(String userID) {
+	public void setUserID(int userID) {
 		this.userID = userID;
 	}
 }
