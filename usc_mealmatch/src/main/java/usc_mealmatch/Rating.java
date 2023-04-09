@@ -48,7 +48,7 @@ public class Rating {
 			boolean success = DatabaseClient.useDatabase((connection, preparedStatement, resultSet) -> {
 				try {
 					preparedStatement = connection.prepareStatement(
-							"INSERT INTO ratings (dining_hall_id, user_id, rating_given) VALUE (?, ?, ?) ON DUPLICATE KEY UPDATE");
+							"INSERT INTO ratings (dining_hall_id, user_id, rating_given) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE rating_given = rating_given");
 
 					preparedStatement.setInt(1, diningHallID);
 					preparedStatement.setInt(2, userID);

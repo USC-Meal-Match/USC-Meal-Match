@@ -13,15 +13,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/login")
-public class LoginAPI extends HttpServlet {
+@WebServlet("/signup")
+public class SignupAPI extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		resp.setHeader("Access-Control-Allow-Origin: ", "*");
-		resp.setContentType("application/json");
-
 		BufferedReader in = req.getReader();
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		EmailPassword curr = gson.fromJson(in, EmailPassword.class);
@@ -31,14 +28,16 @@ public class LoginAPI extends HttpServlet {
 
 		PrintWriter pw = resp.getWriter();
 
-		if (UserAuthenticator.login(email, password)) {
+		if (UserAuthenticator.signup(email, password)) {
 			// setting status
 			resp.setStatus(200);
-			pw.print("{\"authenticated\": \"true\"}");
+			resp.setHeader("Access-Control-Allow-Origin: ", "*");
+			resp.setContentType("application/json");
+			pw.print("{\"signup\": \"true\"}");
 			pw.flush();
 		} else {
 			resp.setStatus(400);
-			pw.print("{\"authenticated\": \"false\"}");
+			pw.print("{\"signup\": \"false\"}");
 			pw.flush();
 		}
 

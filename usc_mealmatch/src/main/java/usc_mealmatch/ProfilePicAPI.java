@@ -1,8 +1,6 @@
 package usc_mealmatch;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -13,36 +11,39 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/login")
-public class LoginAPI extends HttpServlet {
+@WebServlet("/profile-pic")
+public class ProfilePicAPI extends HttpServlet {
+	private class ProfilePicPostInput {
+		private Integer userID;
+		private String profilePicURL;
+
+		public Integer getUserID() {
+			return userID;
+		}
+
+		public String getProfilePicURL() {
+			return profilePicURL;
+		}
+	}
+
 	private static final long serialVersionUID = 1L;
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		resp.setHeader("Access-Control-Allow-Origin: ", "*");
 		resp.setContentType("application/json");
+		resp.setHeader("Access-Control-Allow-Origin: ", "*");
 
-		BufferedReader in = req.getReader();
+		// getting user input from the browser
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		EmailPassword curr = gson.fromJson(in, EmailPassword.class);
 
-		String email = curr.getEmail();
-		String password = curr.getPassword();
+		ProfilePicPostInput curr = gson.fromJson(req.getReader(), ProfilePicPostInput.class);
+		UserProfile profile = UserProfile.getUserProfile(curr.getUserID());
 
-		PrintWriter pw = resp.getWriter();
-
-		if (UserAuthenticator.login(email, password)) {
+		if (profile != null && profile.setPicURL(curr.getProfilePicURL())) {
 			// setting status
 			resp.setStatus(200);
-			pw.print("{\"authenticated\": \"true\"}");
-			pw.flush();
 		} else {
 			resp.setStatus(400);
-			pw.print("{\"authenticated\": \"false\"}");
-			pw.flush();
 		}
-
-		pw.close();
-		in.close();
 	}
 }

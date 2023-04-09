@@ -46,12 +46,44 @@ public class UserProfile {
 		}
 	}
 
-	public UserProfile(int userID, String picURL, List<String> pref, List<String> dietRstr) { // initialize the user
-																								// profile
+	public UserProfile(int userID, String picURL, List<String> pref, List<String> dietRstr) { // initialize the user //
+																								// // profile
 		this.userID = userID;
 		this.picURL = picURL;
 		this.pref = pref;
 		this.dietRstr = dietRstr;
+	}
+
+	public boolean insertDatabase() {
+		try {
+			boolean success = DatabaseClient.useDatabase((connection, preparedStatement, resultSet) -> {
+				try {
+					preparedStatement = connection.prepareStatement(
+							"INSERT INTO user_profiles (user_id, preference_list, dining_hall_id, profile_pic_url, user_diet_restrictions) VALUES (?, ?, ?, ?, ?)");
+
+					preparedStatement.setInt(1, userID);
+					preparedStatement.setString(2, String.join(",", pref));
+					preparedStatement.setInt(3, 1);
+					preparedStatement.setString(4, picURL);
+					preparedStatement.setString(5, String.join(",", dietRstr));
+
+					int count = preparedStatement.executeUpdate();
+
+					if (count > 0) {
+						return true;
+					} else {
+						return false;
+					}
+				} catch (SQLException e) {
+					System.out.println(e.getMessage());
+					return false;
+				}
+			});
+
+			return success;
+		} catch (SQLException e) {
+			return false;
+		}
 	}
 
 	public int getUserID() { // return the user ID

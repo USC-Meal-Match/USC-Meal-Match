@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -62,8 +63,9 @@ public class Menus {
 		menus.add(event);
 	}
 
-	public DiningHall getDiningHall(int index) {
-		return menus.get(index);
+	public DiningHall getDiningHall(int id) {
+		Optional<DiningHall> diningHall = menus.stream().filter((it -> it.getDiningHallID() == id)).findFirst();
+		return diningHall.orElse(null);
 	}
 
 }
