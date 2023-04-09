@@ -18,18 +18,29 @@ public class DiningHallMatcher {
 		// DIET RESTRICTIONS ARE IRRELEVANT
 		// List<String> dietRstr = user.getDietRstr();
 
-		Map<String, List<String>> diningHallMap = new HashMap<String, List<String>>();
-
-		for (String diningHall : diningHallMap .keySet())
+		int bestDiningHall = 0;
+		int bestMatches = 0;
+		for (int i = 0; i < diningHalls.size(); i++)
 		{
+			DiningHall diningHall = diningHalls.get(i);
 			int matches = 0;
-			for (String menu : diningHallMap .get(diningHall))
+			for (String menu : diningHall.getMenu())
 			{
-				for (String preference : preferences) {}
+				for (String preference : preferences)
+				{
+					if (menu.toLowerCase().contains(preference.toLowerCase()))
+					{
+						matches++;
+						break;
+					}
+				}
+			}
+			if (matches > bestMatches)
+			{
+				bestMatches = matches;
+				bestDiningHall = i;
 			}
 		}
-		
-		
-		return 0;
+		return bestDiningHall;
 	}
 }
