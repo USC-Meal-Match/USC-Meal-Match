@@ -14,33 +14,39 @@ public class DiningHallMatcher {
 		return 0;
 	}
 	public int computeDiningHall(UserProfile user, List<DiningHall> diningHalls) { //match the user to their best dining hall
-		List<String> preferences = user.getPref();
+		// List<String> preferences = user.getPref();
 		// DIET RESTRICTIONS ARE IRRELEVANT
 		// List<String> dietRstr = user.getDietRstr();
 
-		int bestDiningHall = 0;
-		int bestMatches = 0;
-		for (int i = 0; i < diningHalls.size(); i++)
-		{
-			DiningHall diningHall = diningHalls.get(i);
-			int matches = 0;
-			for (String menu : diningHall.getMenu())
-			{
-				for (String preference : preferences)
-				{
-					if (menu.toLowerCase().contains(preference.toLowerCase()))
-					{
-						matches++;
-						break;
-					}
-				}
-			}
-			if (matches > bestMatches)
-			{
-				bestMatches = matches;
-				bestDiningHall = i;
-			}
-		}
-		return bestDiningHall;
+		// int bestDiningHall = 0;
+		// int bestMatches = 0;
+		// for (int i = 0; i < diningHalls.size(); i++)
+		// {
+		// 	DiningHall diningHall = diningHalls.get(i);
+		// 	int matches = 0;
+		// 	for (MenuItem menu : diningHall.getMenu())
+		// 	{
+		// 		for (String preference : preferences)
+		// 		{
+		// 			if (menu.getName().toLowerCase().contains(preference.toLowerCase()))
+		// 			{
+		// 				matches++;
+		// 				break;
+		// 			}
+		// 		}
+		// 	}
+		// 	if (matches > bestMatches)
+		// 	{
+		// 		bestMatches = matches;
+		// 		bestDiningHall = i;
+		// 	}
+		// 	else if (matches == bestMatches)
+		// 	{
+		// 		if(diningHalls[i].g)
+		// 	}
+		// }
+		// return bestDiningHall;
+
+		return 0;
 	}
 }
