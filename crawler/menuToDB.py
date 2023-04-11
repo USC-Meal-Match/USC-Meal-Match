@@ -9,7 +9,7 @@ try:
 	connection = mysql.connector.connect(host='localhost',
 										database='usc_mealmatch',
 										user='root',
-										password='root') #not connecting
+										password='root') #connects locally, unable to connect to cloud
 	
 	menus = []
 	
