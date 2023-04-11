@@ -6,10 +6,10 @@ import mysql.connector
 from main import *
 
 try:
-	connection = mysql.connector.connect(host='34.31.63.204',
-										database='usc_mealmatch',
-										user='root',
-										password='csci201') #connects to the database
+	connection = mysql.connector.connect(host='34.31.63.204', 
+				      database='usc_mealmatch', 
+					  user='root', 
+					  password='csci201') #connects to the database
 	
 	cursor = connection.cursor() #connect the cursor
 
@@ -25,7 +25,6 @@ try:
 			menus = crawl_menus(i+1, diningHallID) #crawl the menu
 			for j in range(len(menus)): #input the item name, dining hall ID, and diet restrictions
 				item_name = str(menus[j]["name"])
-				print(menus[j]["allergy"])
 				diet_restrictions = str(", ".join(menus[j]["allergy"]))
 				
 				cursor.execute(query, (item_name, str(diningHallID), diet_restrictions)) #execute prepared statement
