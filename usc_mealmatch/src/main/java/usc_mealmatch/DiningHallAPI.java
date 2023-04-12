@@ -38,7 +38,7 @@ public class DiningHallAPI extends HttpServlet {
 		Menus menus = Menus.getMenus();
 
 		if (menus != null) {
-			if (curr.getDiningHallID() == null) {
+			if (curr == null) {
 				// setting status
 				resp.setStatus(200);
 				PrintWriter pw = resp.getWriter();
