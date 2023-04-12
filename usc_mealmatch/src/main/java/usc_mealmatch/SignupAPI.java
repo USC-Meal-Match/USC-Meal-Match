@@ -25,6 +25,8 @@ public class SignupAPI extends HttpServlet {
 
 		String email = curr.getEmail();
 		String password = curr.getPassword();
+		int userID = curr.getUserID();
+		String idString = Integer.toString(userID);
 
 		PrintWriter pw = resp.getWriter();
 
@@ -33,7 +35,7 @@ public class SignupAPI extends HttpServlet {
 			resp.setStatus(200);
 			resp.setHeader("Access-Control-Allow-Origin: ", "*");
 			resp.setContentType("application/json");
-			pw.print("{\"signup\": \"true\"}");
+			pw.print("\"userID\": \"" + idString + "\"}");
 			pw.flush();
 		} else {
 			resp.setStatus(400);
