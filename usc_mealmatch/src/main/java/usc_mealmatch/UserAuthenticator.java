@@ -1,6 +1,7 @@
 package usc_mealmatch;
 
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class UserAuthenticator {
 	/**
@@ -8,11 +9,11 @@ public class UserAuthenticator {
 	 * 
 	 * @param email
 	 * @param password
-	 * @return true if user successfully logged in, or false if login failed
+	 * @return user ID if user successfully logged in, or -1 if login failed
 	 */
-	public static boolean login(String email, String password) { // authenticate the user's login input
+	public static int login(String email, String password) { // authenticate the user's login input
 		try {
-			boolean success = DatabaseClient.useDatabase((connection, preparedStatement, resultSet) -> {
+			int userID = DatabaseClient.useDatabase((connection, preparedStatement, resultSet) -> {
 				try {
 					preparedStatement = connection
 							.prepareStatement("SELECT * FROM auth WHERE user_email=? AND user_password=?");
@@ -24,19 +25,19 @@ public class UserAuthenticator {
 
 					if (resultSet.next()) {
 						// At least one row matches the given email and password
-						return true;
+						return resultSet.getInt("user_id");
 					} else {
-						return false;
+						return -1;
 					}
 				} catch (SQLException e) {
 					System.out.println(e.getMessage());
-					return false;
+					return -1;
 				}
 			});
 
-			return success;
+			return userID;
 		} catch (SQLException e) {
-			return false;
+			return -1;
 		}
 	}
 
@@ -45,35 +46,38 @@ public class UserAuthenticator {
 	 * 
 	 * @param email
 	 * @param password
-	 * @return true if user successfully signed up, or false if signup failed (e.g.
-	 *         account already exists)
+	 * @return user ID if user successfully signed up, -1 false if signup failed
+	 *         (e.g. account already exists)
 	 */
-	public static boolean signup(String email, String password) {
+	public static int signup(String email, String password) {
 		try {
-			boolean success = DatabaseClient.useDatabase((connection, preparedStatement, resultSet) -> {
+			int userID = DatabaseClient.useDatabase((connection, preparedStatement, resultSet) -> {
 				try {
-					preparedStatement = connection
-							.prepareStatement("INSERT INTO auth (user_email, user_password) VALUE (?, ?)");
+					preparedStatement = connection.prepareStatement(
+							"INSERT INTO auth (user_email, user_password) VALUE (?, ?)",
+							Statement.RETURN_GENERATED_KEYS);
 
 					preparedStatement.setString(1, email);
 					preparedStatement.setString(2, password);
 
-					int count = preparedStatement.executeUpdate();
+					preparedStatement.executeUpdate();
 
-					if (count > 0) {
-						return true;
+					resultSet = preparedStatement.getGeneratedKeys();
+
+					if (resultSet.next()) {
+						return resultSet.getInt(1);
 					} else {
-						return false;
+						return -1;
 					}
 				} catch (SQLException e) {
 					System.out.println(e.getMessage());
-					return false;
+					return -1;
 				}
 			});
 
-			return success;
+			return userID;
 		} catch (SQLException e) {
-			return false;
+			return -1;
 		}
 	}
 }

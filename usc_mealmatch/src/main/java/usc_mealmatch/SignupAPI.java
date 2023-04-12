@@ -19,27 +19,27 @@ public class SignupAPI extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		resp.setHeader("Access-Control-Allow-Origin: ", "*");
+		resp.setContentType("application/json");
+
 		BufferedReader in = req.getReader();
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		EmailPassword curr = gson.fromJson(in, EmailPassword.class);
 
 		String email = curr.getEmail();
 		String password = curr.getPassword();
-		int userID = curr.getUserID();
-		String idString = Integer.toString(userID);
+		int userID = UserAuthenticator.signup(email, password);
 
 		PrintWriter pw = resp.getWriter();
 
-		if (UserAuthenticator.signup(email, password)) {
+		if (userID >= 0) {
 			// setting status
 			resp.setStatus(200);
-			resp.setHeader("Access-Control-Allow-Origin: ", "*");
-			resp.setContentType("application/json");
-			pw.print("\"userID\": \"" + idString + "\"}");
+			pw.print("{\"signup\": true, \"userID\": \"" + userID + "\"}");
 			pw.flush();
 		} else {
 			resp.setStatus(400);
-			pw.print("{\"signup\": \"false\"}");
+			pw.print("{\"signup\": false}");
 			pw.flush();
 		}
 

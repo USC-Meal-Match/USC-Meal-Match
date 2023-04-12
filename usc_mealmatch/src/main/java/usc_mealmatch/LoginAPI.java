@@ -28,20 +28,19 @@ public class LoginAPI extends HttpServlet {
 
 		String email = curr.getEmail();
 		String password = curr.getPassword();
-		int userID = curr.getUserID();
-		String idString = Integer.toString(userID);
+		int userID = UserAuthenticator.login(email, password);
 
 		PrintWriter pw = resp.getWriter();
 
-		if (UserAuthenticator.login(email, password)) {
+		if (userID >= 0) {
 			// setting status
 			resp.setStatus(200);
-			pw.print("{\"authenticated\": \"true\",");
-			pw.print("\"userID\": \"" + idString + "\"}");
+			pw.print("{\"authenticated\": true, ");
+			pw.print("\"userID\": \"" + userID + "\"}");
 			pw.flush();
 		} else {
 			resp.setStatus(400);
-			pw.print("{\"authenticated\": \"false\"}");
+			pw.print("{\"authenticated\": false}");
 			pw.flush();
 		}
 

@@ -51,7 +51,7 @@ public class DiningHallAPI extends HttpServlet {
 				DiningHall diningHall = menus.getDiningHall(id);
 				if (diningHall != null) {
 					List<MenuItem> menu = diningHall.getMenu();
-					DiningHallItem dItem = new DiningHallItem(diningHall.getName(),id, menu);
+					DiningHallItem dItem = new DiningHallItem(diningHall.getName(), id, menu);
 					resp.setStatus(200);
 					PrintWriter pw = resp.getWriter();
 					String json = gson.toJson(dItem);
