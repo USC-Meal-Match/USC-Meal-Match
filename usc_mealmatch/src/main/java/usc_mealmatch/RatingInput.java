@@ -1,3 +1,7 @@
+/*
+Coded by Ken Xu, Joey Yap
+04/07/2023 :: UPDATED 04/09/2023
+*/
 package usc_mealmatch;
 
 //this class is for storing the (rating, dininghall id, userid)
