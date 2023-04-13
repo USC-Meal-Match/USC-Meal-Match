@@ -1,8 +1,7 @@
 /*
-Coded by Genia Druzhinina
-04/03/2023
+Coded by Genia Druzhinina, Ken Xu, Joey Yap
+04/06/2023 :: UPDATED 04/08/2023
 */
-
 package usc_mealmatch;
 
 import java.util.List;
@@ -22,7 +21,7 @@ public class DiningHall {
 		return diningHallID;
 	}
 	
-	public String getName() {
+	public String getName() { //get the name of the dining hall
 		return name;
 	}
 
@@ -30,7 +29,7 @@ public class DiningHall {
 		return menu;
 	}
 
-	public void addToMenu(MenuItem item) {
+	public void addToMenu(MenuItem item) { //add an item to the dining hall menu
 		menu.add(item);
 	}
 }
