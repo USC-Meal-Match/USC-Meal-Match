@@ -1,8 +1,7 @@
 /*
-Coded by Genia Druzhinina
-04/03/2023
+Coded by Genia Druzhinina, Ken Xu, Joey Yap, Kyle Gan
+04/03/2023 :: UPDATED 04/10/2023
 */
-
 package usc_mealmatch;
 
 import java.util.HashSet;
