@@ -3,7 +3,7 @@ package usc_mealmatch;
 //this class is for storing the (rating, dininghall id, userid)
 public class RatingInput {
 	private int rating;
-	private int dininghallID;
+	private int diningHallID;
 	private int userID;
 
 	public int getRating() {
@@ -15,11 +15,11 @@ public class RatingInput {
 	}
 
 	public int getDininghaID() {
-		return dininghallID;
+		return diningHallID;
 	}
 
 	public void setDininghaID(int dininghaID) {
-		this.dininghallID = dininghaID;
+		this.diningHallID = dininghaID;
 	}
 
 	public int getUserID() {

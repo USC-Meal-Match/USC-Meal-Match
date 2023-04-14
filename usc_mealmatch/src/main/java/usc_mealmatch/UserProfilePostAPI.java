@@ -1,5 +1,6 @@
 package usc_mealmatch;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 
 import com.google.gson.Gson;
@@ -11,9 +12,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/diet-restrictions")
-public class DietPreferenceListAPI extends HttpServlet {
-
+@WebServlet("/profile")
+public class UserProfilePostAPI extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
@@ -21,15 +21,11 @@ public class DietPreferenceListAPI extends HttpServlet {
 		resp.setContentType("application/json");
 		resp.setHeader("Access-Control-Allow-Origin", "*");
 
-		// getting user input from the browser
+		BufferedReader in = req.getReader();
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		UserProfile curr = gson.fromJson(in, UserProfile.class);
 
-		DietPreferenceList curr = gson.fromJson(req.getReader(), DietPreferenceList.class);
-		UserProfile profile = UserProfile.getUserProfile(curr.getUserID());
-
-		// Setting the diet restriction to the list acquired by curr
-		if (profile.setDietRstr(curr.getDietList())) {
-			// setting status
+		if (curr != null && curr.insertDatabase()) {
 			resp.setStatus(200);
 		} else {
 			resp.setStatus(400);

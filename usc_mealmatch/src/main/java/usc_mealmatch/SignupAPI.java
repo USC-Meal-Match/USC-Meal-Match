@@ -19,7 +19,7 @@ public class SignupAPI extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		resp.setHeader("Access-Control-Allow-Origin: ", "*");
+		resp.setHeader("Access-Control-Allow-Origin", "*");
 		resp.setContentType("application/json");
 
 		BufferedReader in = req.getReader();

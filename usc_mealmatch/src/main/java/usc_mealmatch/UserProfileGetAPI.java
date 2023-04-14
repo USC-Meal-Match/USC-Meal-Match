@@ -2,7 +2,6 @@ package usc_mealmatch;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -13,8 +12,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/dininghall/*")
-public class DiningHallAPI extends HttpServlet {
+@WebServlet("/profile/*")
+public class UserProfileGetAPI extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
@@ -26,15 +25,12 @@ public class DiningHallAPI extends HttpServlet {
 
 		try {
 			int id = Integer.parseInt(req.getPathInfo().substring(1));
-			Menus menus = Menus.getMenus();
+			UserProfile profile = UserProfile.getUserProfile(id);
 
-			DiningHall diningHall = menus.getDiningHall(id);
-			if (diningHall != null) {
-				List<MenuItem> menu = diningHall.getMenu();
-				DiningHallItem dItem = new DiningHallItem(diningHall.getName(), id, menu);
+			if (profile != null) {
 				resp.setStatus(200);
 				PrintWriter pw = resp.getWriter();
-				String json = gson.toJson(dItem);
+				String json = gson.toJson(profile);
 				pw.print(json);
 				pw.flush();
 				pw.close();

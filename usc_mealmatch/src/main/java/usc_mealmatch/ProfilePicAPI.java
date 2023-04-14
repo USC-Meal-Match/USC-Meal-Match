@@ -31,7 +31,7 @@ public class ProfilePicAPI extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		resp.setContentType("application/json");
-		resp.setHeader("Access-Control-Allow-Origin: ", "*");
+		resp.setHeader("Access-Control-Allow-Origin", "*");
 
 		// getting user input from the browser
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
