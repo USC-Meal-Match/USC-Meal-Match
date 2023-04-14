@@ -72,4 +72,7 @@ public class Menus {
 		return diningHall.orElse(null);
 	}
 
+	public List<DiningHall> getDiningHalls() {
+		return menus;
+	}
 }

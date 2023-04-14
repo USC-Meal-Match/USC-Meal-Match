@@ -58,7 +58,7 @@ public class UserProfile {
 			boolean success = DatabaseClient.useDatabase((connection, preparedStatement, resultSet) -> {
 				try {
 					preparedStatement = connection.prepareStatement(
-							"INSERT INTO user_profiles (user_id, preference_list, dining_hall_id, profile_pic_url, user_diet_restrictions) VALUES (?, ?, ?, ?, ?)");
+							"INSERT INTO user_profiles (user_id, preference_list, dining_hall_id, profile_pic_url, user_diet_restrictions) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE user_id = user_id");
 
 					preparedStatement.setInt(1, userID);
 					preparedStatement.setString(2, String.join(",", pref));
