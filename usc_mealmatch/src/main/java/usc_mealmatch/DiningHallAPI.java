@@ -1,3 +1,7 @@
+/*
+Coded by Ken Xu, Joey Yap
+04/06/2023 :: UPDATED 04/12/2023
+*/
 package usc_mealmatch;
 
 import java.io.IOException;

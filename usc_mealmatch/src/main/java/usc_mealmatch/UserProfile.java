@@ -1,8 +1,7 @@
 /*
-Coded by Genia Druzhinina
-04/03/2023
+Coded by Genia Druzhinina, Ken Xu, Joey Yap
+04/03/2023 :: UPDATED 04/09/2023
 */
-
 package usc_mealmatch;
 
 import java.sql.SQLException;
