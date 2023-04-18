@@ -22,27 +22,31 @@ public class UserProfileGetAPI extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		PrintWriter pw = resp.getWriter();
+
 		resp.setContentType("application/json");
 		resp.setHeader("Access-Control-Allow-Origin", "*");
 
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
 		try {
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
 			int id = Integer.parseInt(req.getPathInfo().substring(1));
 			UserProfile profile = UserProfile.getUserProfile(id);
 
 			if (profile != null) {
 				resp.setStatus(200);
-				PrintWriter pw = resp.getWriter();
 				String json = gson.toJson(profile);
-				pw.print(json);
-				pw.flush();
-				pw.close();
+				pw.println(json);
 			} else {
 				resp.setStatus(400);
+				pw.print("{\"error\": \"User does not exist or could not find a suitable match\"}");
 			}
 		} catch (NumberFormatException e) {
 			resp.setStatus(400);
+			pw.print("{\"error\": \"Invalid user ID provided\"}");
+		} finally {
+			pw.flush();
+			pw.close();
 		}
 	}
 }

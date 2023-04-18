@@ -23,6 +23,8 @@ public class DiningHallAPI extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		PrintWriter pw = resp.getWriter();
+
 		resp.setContentType("application/json");
 		resp.setHeader("Access-Control-Allow-Origin", "*");
 
@@ -37,16 +39,19 @@ public class DiningHallAPI extends HttpServlet {
 				List<MenuItem> menu = diningHall.getMenu();
 				DiningHallItem dItem = new DiningHallItem(diningHall.getName(), id, menu);
 				resp.setStatus(200);
-				PrintWriter pw = resp.getWriter();
 				String json = gson.toJson(dItem);
 				pw.print(json);
-				pw.flush();
-				pw.close();
+
 			} else {
 				resp.setStatus(400);
+				pw.print("{\"error\": \"Dining hall does not exist or has no menu\"}");
 			}
 		} catch (NumberFormatException e) {
 			resp.setStatus(400);
+			pw.print("{\"error\": \"Invalid dining hall ID provided\"}");
+		} finally {
+			pw.flush();
+			pw.close();
 		}
 	}
 }

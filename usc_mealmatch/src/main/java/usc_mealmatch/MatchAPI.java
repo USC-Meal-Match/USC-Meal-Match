@@ -15,6 +15,8 @@ public class MatchAPI extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		PrintWriter pw = resp.getWriter();
+
 		resp.setContentType("application/json");
 		resp.setHeader("Access-Control-Allow-Origin", "*");
 
@@ -24,15 +26,17 @@ public class MatchAPI extends HttpServlet {
 
 			if (match >= 0) {
 				resp.setStatus(200);
-				PrintWriter pw = resp.getWriter();
 				pw.printf("{\"match\": %d}", match);
-				pw.flush();
-				pw.close();
 			} else {
 				resp.setStatus(400);
+				pw.print("{\"error\": \"User does not exist or has no profile yet\"}");
 			}
 		} catch (NumberFormatException e) {
 			resp.setStatus(400);
+			pw.print("{\"error\": \"Invalid user ID provided\"}");
+		} finally {
+			pw.flush();
+			pw.close();
 		}
 	}
 }

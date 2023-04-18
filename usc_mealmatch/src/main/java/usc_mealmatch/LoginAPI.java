@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -23,32 +24,55 @@ public class LoginAPI extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		resp.setHeader("Access-Control-Allow-Origin", "*");
-		resp.setContentType("application/json");
-
-		BufferedReader in = req.getReader();
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		EmailPassword curr = gson.fromJson(in, EmailPassword.class);
-
-		String email = curr.getEmail();
-		String password = curr.getPassword();
-		int userID = UserAuthenticator.login(email, password);
-
 		PrintWriter pw = resp.getWriter();
+		BufferedReader in = req.getReader();
 
-		if (userID >= 0) {
-			// setting status
-			resp.setStatus(200);
-			pw.print("{\"authenticated\": true, ");
-			pw.print("\"userID\": \"" + userID + "\"}");
-			pw.flush();
-		} else {
+		try {
+			resp.setHeader("Access-Control-Allow-Origin", "*");
+			resp.setContentType("application/json");
+
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+			EmailPassword curr = gson.fromJson(in, EmailPassword.class);
+
+			if (curr == null) {
+				resp.setStatus(400);
+				pw.println("{\"error\": \"No request body provided\"}");
+				return;
+			}
+
+			String email = curr.getEmail();
+			if (email == null) {
+				resp.setStatus(400);
+				pw.println("{\"error\": \"Email not provided\"}");
+				return;
+			}
+
+			String password = curr.getPassword();
+			if (password == null) {
+				resp.setStatus(400);
+				pw.println("{\"error\": \"Password not provided\"}");
+				return;
+			}
+
+			int userID = UserAuthenticator.login(email, password);
+
+			if (userID >= 0) {
+				// setting status
+				resp.setStatus(200);
+				pw.print("{\"authenticated\": true, ");
+				pw.println("\"userID\": \"" + userID + "\"}");
+			} else {
+				resp.setStatus(401);
+				pw.println("{\"authenticated\": false}");
+			}
+		} catch (JsonSyntaxException e) {
 			resp.setStatus(400);
-			pw.print("{\"authenticated\": false}");
+			pw.println("{\"error\": \"Invalid JSON\"}");
+		} finally {
 			pw.flush();
+			pw.close();
+			in.close();
 		}
-
-		pw.close();
-		in.close();
 	}
 }
