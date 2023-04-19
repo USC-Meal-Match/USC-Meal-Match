@@ -64,7 +64,7 @@ public class UserProfile {
 					}
 
 					preparedStatement = connection.prepareStatement(
-							"INSERT INTO user_profiles (user_id, preference_list, dining_hall_id, profile_pic_url, user_diet_restrictions) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE user_id = user_id");
+							"INSERT INTO user_profiles (user_id, preference_list, dining_hall_id, profile_pic_url, user_diet_restrictions) VALUES (?, ?, ?, ?, ?) AS v ON DUPLICATE KEY UPDATE preference_list = v.preference_list, dining_hall_id = v.dining_hall_id, profile_pic_url = v.profile_pic_url, user_diet_restrictions = v.user_diet_restrictions");
 
 					preparedStatement.setInt(1, userID);
 					preparedStatement.setString(2, String.join(",", pref));
