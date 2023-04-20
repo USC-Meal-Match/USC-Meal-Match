@@ -68,11 +68,16 @@ public class DiningHallMatcher {
 				}
 				if (hasR)
 					continue;
-
-				if ((vegetarian && !itemVegetarian) || (vegan && !itemVegan)) {
-					continue;
+				if (vegetarian) {
+					if (!itemVegetarian) {
+						continue;
+					}
 				}
-
+				if (vegan) {
+					if (!itemVegan) {
+						continue;
+					}
+				}
 				// At this point the item is guaranteed to be "edible" now we see if we should
 				// add bonus points
 				if ((vegetarian && itemVegetarian) || (vegan && itemVegan)) {
