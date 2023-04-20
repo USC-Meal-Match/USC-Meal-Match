@@ -95,7 +95,7 @@ public class DiningHallMatcher {
 			total = preferenceMatches + 0.5 * vegMatches;
 			if (total > bestMatches) {
 				bestMatches = total;
-				bestDiningHall = diningHall.getDiningHallID();
+				bestDiningHall = i;
 				bestRating = Rating.getRating(diningHall.getDiningHallID());
 			} else if (total == bestMatches) {
 				if (Rating.getRating(diningHall.getDiningHallID()) > bestRating) {
