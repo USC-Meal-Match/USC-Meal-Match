@@ -14,6 +14,7 @@ try:
 	cursor = connection.cursor() #connect the cursor
 
 	cursor.execute("TRUNCATE TABLE menu") #delete the pre-existing menu
+	cursor.execute("TRUNCATE TABLE ratings") #delete the pre-existing ratings
 	cursor.execute("SELECT * from dining_halls") #select the dining_halls table
 	
 	diningHalls = cursor.fetchall() #retrieve the dining_halls table
