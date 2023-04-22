@@ -1,3 +1,7 @@
+/*
+Coded by Ken Xu, Joey Yap
+04/06/2023 :: UPDATED 04/09/2023
+*/
 package usc_mealmatch;
 
 import java.sql.SQLException;
@@ -68,4 +72,7 @@ public class Menus {
 		return diningHall.orElse(null);
 	}
 
+	public List<DiningHall> getDiningHalls() {
+		return menus;
+	}
 }

@@ -1,8 +1,7 @@
 /*
-Coded by Genia Druzhinina
-04/03/2023
+Coded by Genia Druzhinina, Ken Xu, Joey Yap
+04/03/2023 :: UPDATED 04/09/2023
 */
-
 package usc_mealmatch;
 
 import java.sql.SQLException;
@@ -10,7 +9,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class UserProfile {
-	private int userID; // ID of the user
+	private static final String DEFAULT_PIC_URL = "https://d2w9rnfcy7mm78.cloudfront.net/14089132/original_4e0a6e7e65dcef6e22f63967f42291ac.png";
+
+	private Integer userID; // ID of the user
 	private String picURL; // URL of user profile pic
 	private List<String> pref; // user's preference list
 	private List<String> dietRstr; // user's dietary restriction list
@@ -58,8 +59,12 @@ public class UserProfile {
 		try {
 			boolean success = DatabaseClient.useDatabase((connection, preparedStatement, resultSet) -> {
 				try {
+					if (picURL == null) {
+						picURL = DEFAULT_PIC_URL;
+					}
+
 					preparedStatement = connection.prepareStatement(
-							"INSERT INTO user_profiles (user_id, preference_list, dining_hall_id, profile_pic_url, user_diet_restrictions) VALUES (?, ?, ?, ?, ?)");
+							"INSERT INTO user_profiles (user_id, preference_list, dining_hall_id, profile_pic_url, user_diet_restrictions) VALUES (?, ?, ?, ?, ?) AS v ON DUPLICATE KEY UPDATE preference_list = v.preference_list, dining_hall_id = v.dining_hall_id, profile_pic_url = v.profile_pic_url, user_diet_restrictions = v.user_diet_restrictions");
 
 					preparedStatement.setInt(1, userID);
 					preparedStatement.setString(2, String.join(",", pref));
@@ -86,7 +91,7 @@ public class UserProfile {
 		}
 	}
 
-	public int getUserID() { // return the user ID
+	public Integer getUserID() { // return the user ID
 		return userID;
 	}
 

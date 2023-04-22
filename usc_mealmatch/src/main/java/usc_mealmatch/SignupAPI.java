@@ -1,3 +1,7 @@
+/*
+Coded by Joey Yap, Ken Xu
+04/09/2023 :: UPDATED 04/12/2023
+*/
 package usc_mealmatch;
 
 import java.io.BufferedReader;
@@ -6,6 +10,7 @@ import java.io.PrintWriter;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -19,29 +24,53 @@ public class SignupAPI extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		BufferedReader in = req.getReader();
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		EmailPassword curr = gson.fromJson(in, EmailPassword.class);
-
-		String email = curr.getEmail();
-		String password = curr.getPassword();
-
 		PrintWriter pw = resp.getWriter();
+		BufferedReader in = req.getReader();
 
-		if (UserAuthenticator.signup(email, password)) {
-			// setting status
-			resp.setStatus(200);
-			resp.setHeader("Access-Control-Allow-Origin: ", "*");
+		try {
+			resp.setHeader("Access-Control-Allow-Origin", "*");
 			resp.setContentType("application/json");
-			pw.print("{\"signup\": \"true\"}");
-			pw.flush();
-		} else {
-			resp.setStatus(400);
-			pw.print("{\"signup\": \"false\"}");
-			pw.flush();
-		}
 
-		pw.close();
-		in.close();
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			EmailPassword curr = gson.fromJson(in, EmailPassword.class);
+
+			if (curr == null) {
+				resp.setStatus(400);
+				pw.println("{\"error\": \"No request body provided\"}");
+				return;
+			}
+
+			String email = curr.getEmail();
+			if (email == null) {
+				resp.setStatus(400);
+				pw.println("{\"error\": \"Email not provided\"}");
+				return;
+			}
+
+			String password = curr.getPassword();
+			if (password == null) {
+				resp.setStatus(400);
+				pw.println("{\"error\": \"Password not provided\"}");
+				return;
+			}
+
+			int userID = UserAuthenticator.signup(email, password);
+
+			if (userID >= 0) {
+				// setting status
+				resp.setStatus(200);
+				pw.print("{\"signup\": true, \"userID\": \"" + userID + "\"}");
+			} else {
+				resp.setStatus(409);
+				pw.print("{\"signup\": false, \"error\": \"Email already exists\"}");
+			}
+		} catch (JsonSyntaxException e) {
+			resp.setStatus(400);
+			pw.println("{\"error\": \"Invalid JSON\"}");
+		} finally {
+			pw.flush();
+			pw.close();
+			in.close();
+		}
 	}
 }

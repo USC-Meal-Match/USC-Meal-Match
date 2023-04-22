@@ -1,12 +1,11 @@
 /*
-Coded by Ken Xu, Joey Yap
-04/06/2023 :: UPDATED 04/12/2023
+Coded by Joey Yap
+04/09/2023
 */
 package usc_mealmatch;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -17,8 +16,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/dininghall/*")
-public class DiningHallAPI extends HttpServlet {
+@WebServlet("/profile/*")
+public class UserProfileGetAPI extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
@@ -28,27 +27,23 @@ public class DiningHallAPI extends HttpServlet {
 		resp.setContentType("application/json");
 		resp.setHeader("Access-Control-Allow-Origin", "*");
 
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
 		try {
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
 			int id = Integer.parseInt(req.getPathInfo().substring(1));
-			Menus menus = Menus.getMenus();
+			UserProfile profile = UserProfile.getUserProfile(id);
 
-			DiningHall diningHall = menus.getDiningHall(id);
-			if (diningHall != null) {
-				List<MenuItem> menu = diningHall.getMenu();
-				DiningHallItem dItem = new DiningHallItem(diningHall.getName(), id, menu);
+			if (profile != null) {
 				resp.setStatus(200);
-				String json = gson.toJson(dItem);
-				pw.print(json);
-
+				String json = gson.toJson(profile);
+				pw.println(json);
 			} else {
 				resp.setStatus(400);
-				pw.print("{\"error\": \"Dining hall does not exist or has no menu\"}");
+				pw.print("{\"error\": \"User does not exist or could not find a suitable match\"}");
 			}
 		} catch (NumberFormatException e) {
 			resp.setStatus(400);
-			pw.print("{\"error\": \"Invalid dining hall ID provided\"}");
+			pw.print("{\"error\": \"Invalid user ID provided\"}");
 		} finally {
 			pw.flush();
 			pw.close();

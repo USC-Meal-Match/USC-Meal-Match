@@ -1,7 +1,11 @@
+/*
+Coded by Ken Xu, Joey Yap
+04/06/2023 :: UPDATED 04/12/2023
+*/
 package usc_mealmatch;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -9,20 +13,13 @@ public class DiningHallItem {
 	private String name;
 
 	@SerializedName("items")
-	private ArrayList<String> items;
-	
+	private List<String> items;
+
 	private double avgRating;
-	
-	//@SerializedName("dietRstr")
-	//private ArrayList<String> dietRstr;
-	
-	public DiningHallItem(String name, int dininghallID, List<MenuItem> menuItems)
-	{
+
+	public DiningHallItem(String name, int dininghallID, List<MenuItem> menuItems) {
 		this.name = name;
-		for(int i=0;i<menuItems.size();i++)
-		{
-			items.add(menuItems.get(i).getName());
-		}
+		items = menuItems.stream().map(item -> item.getName()).collect(Collectors.toList());
 		avgRating = Rating.getRating(dininghallID);
 	}
 

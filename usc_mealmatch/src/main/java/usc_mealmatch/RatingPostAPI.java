@@ -1,7 +1,3 @@
-/*
-Coded by Joey Yap
-04/09/2023
-*/
 package usc_mealmatch;
 
 import java.io.BufferedReader;
@@ -18,40 +14,43 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/profile-pic")
-public class ProfilePicAPI extends HttpServlet {
-	private class ProfilePicPostInput {
-		private Integer userID;
-		private String profilePicURL;
-
-		public Integer getUserID() {
-			return userID;
-		}
-
-		public String getProfilePicURL() {
-			return profilePicURL;
-		}
-	}
-
+@WebServlet("/rating")
+public class RatingPostAPI extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		BufferedReader in = req.getReader();
 		PrintWriter pw = resp.getWriter();
+		BufferedReader in = req.getReader();
 
 		try {
 			resp.setContentType("application/json");
 			resp.setHeader("Access-Control-Allow-Origin", "*");
 
-			// getting user input from the browser
 			Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-			ProfilePicPostInput curr = gson.fromJson(in, ProfilePicPostInput.class);
+			RatingInput curr = gson.fromJson(in, RatingInput.class);
 
 			if (curr == null) {
 				resp.setStatus(400);
 				pw.println("{\"error\": \"No request body provided\"}");
+				return;
+			}
+
+			Integer rating = curr.getRating();
+			if (rating == null) {
+				resp.setStatus(400);
+				pw.println("{\"error\": \"Rating not provided\"}");
+				return;
+			} else if (rating > 5 || rating < 1) {
+				resp.setStatus(400);
+				pw.println("{\"error\": \"Rating should be between 1 and 5\"}");
+			}
+
+			Integer diningHallID = curr.getDininghaID();
+			if (diningHallID == null) {
+				resp.setStatus(400);
+				pw.println("{\"error\": \"Dining hall ID not provided\"}");
 				return;
 			}
 
@@ -62,27 +61,12 @@ public class ProfilePicAPI extends HttpServlet {
 				return;
 			}
 
-			String url = curr.getProfilePicURL();
-			if (url == null) {
-				resp.setStatus(400);
-				pw.println("{\"error\": \"Profile picture URL not provided\"}");
-				return;
-			}
-
-			UserProfile profile = UserProfile.getUserProfile(userID);
-			if (profile == null) {
-				resp.setStatus(400);
-				pw.println("{\"error\": \"User ID is invalid\"}");
-				return;
-			}
-
-			if (profile.setPicURL(url)) {
+			if (Rating.setRating(rating, diningHallID, userID)) {
 				// setting status
 				resp.setStatus(200);
 			} else {
 				resp.setStatus(400);
-				pw.println("{\"error\": \"Failed to update profile picture\"}");
-				return;
+				pw.println("{\"error\": \"Dining hall ID or user ID is invalid\"}");
 			}
 		} catch (JsonSyntaxException e) {
 			resp.setStatus(400);

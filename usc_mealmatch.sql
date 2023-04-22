@@ -1,6 +1,6 @@
 /*
-Coded by Genia Druzhinina
-04/03/2023 :: UPDATED 04/07/2023
+Coded by Genia Druzhinina, Joey Yap
+04/03/2023 :: UPDATED 04/12/2023
 */
 
 DROP DATABASE IF EXISTS usc_mealmatch;
@@ -9,7 +9,7 @@ USE usc_mealmatch;
 
 CREATE TABLE auth (
 	user_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    user_email VARCHAR(255) NOT NULL,
+    user_email VARCHAR(255) NOT NULL UNIQUE,
     user_password VARCHAR(255) NOT NULL /*password wasn't an available variable*/
 );
     

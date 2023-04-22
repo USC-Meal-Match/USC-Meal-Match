@@ -1,86 +1,37 @@
 """
-coded by 04/03/2023
-Changzhong Qian
+Coded by Genia Druzhinina
+04/07/2023 :: UPDATED 04/11/2023
 """
+import mysql.connector
+from main import *
 
-import requests
-from bs4 import BeautifulSoup
-from datetime import datetime
+try:
+	connection = mysql.connector.connect(host='34.31.63.204', 
+				      database='usc_mealmatch', 
+					  user='root', 
+					  password='csci201') #connects to the database
+	
+	cursor = connection.cursor() #connect the cursor
 
-"""
-@param session: 
-    1 = breakfast menu
-    2 = lunch menu
-    3 = dinner menu
-@param location:
-    1 = parkside
-    2 = village
-    3 = evk
-@return: a list with first element as the dish name, second element is a list of allergy
-"""
-def crawl_menus(session, location):
-    if session == 1:
-        meal = "breakfast"
-    elif session == 2:
-        meal = "lunch"
-    elif session == 3:
-        meal = "brunch"
-    elif session == 4:
-        meal = "dinner"
-    if location == 1:
-        loc = "?menu_venue=venue-518&menu_date="
-    elif location == 2:
-        loc = "?menu_venue=venue-27229&menu_date="
-    elif location == 3:
-        loc = "?menu_venue=venue-514&menu_date="
-    current_date = datetime.now()
-    formatted_date = current_date.strftime("%B+%d%%2C+%Y")
-    url = "https://hospitality.usc.edu/residential-dining-menus/" + loc + formatted_date
-    response = requests.get(url)
-    if response.status_code != 200:
-        print(f"Failed to fetch page: {response.status_code}")
-        return None
-
-    soup = BeautifulSoup(response.text, "html.parser")
-
-    # Find the menu sections
-    menu_sections = soup.find_all("div", class_="col-sm-6 col-md-4")
-    menus = []
-
-    for menu in menu_sections:
-        title = menu.find('h3', class_='menu-venue-title')
-        if title.text.strip().lower() == meal:
-            select_menu = menu.find_all('ul', class_='menu-item-list')
-            break
-
-    for ul in select_menu:
-        for item in ul.find_all("li"):
-            menu_name = item.contents[0]
-            menu_allergen = []
-            allergens = item.find_all('span', class_='fa-allergen-container')
-            for allergen in allergens:
-                typeAllergens = allergen.find_all('span', class_=None)
-                for typeAllergen in typeAllergens:
-                    menu_allergen.append(typeAllergen.text)
-
-            menus.append({
-                "name": menu_name,
-                "allergy": menu_allergen
-            })
-    return menus
-
-
-def main():
-    menus = crawl_menus(1,1)
-    if menus:
-        for menu in menus:
-            print(f"{menu['name']}:")
-
-            for item in menu['allergy']:
-                print(f"  - {item}")
-
-            print()
-
-
-if __name__ == "__main__":
-    main()
+	cursor.execute("TRUNCATE TABLE menu") #delete the pre-existing menu
+	cursor.execute("TRUNCATE TABLE ratings") #delete the pre-existing ratings
+	cursor.execute("SELECT * from dining_halls") #select the dining_halls table
+	
+	diningHalls = cursor.fetchall() #retrieve the dining_halls table
+	query = "INSERT INTO menu(item_name, dining_hall_id, diet_restrictions) VALUES (%s, %s, %s)" #create the query for prepared statement
+	
+	for row in diningHalls: #go through all the dining halls
+		diningHallID = row[0] #gets the ID of the dining hall
+		for i in range(2): #crawl through each dining hall's session
+			menus = crawl_menus(i+1, diningHallID) #crawl the menu
+			for j in range(len(menus)): #input the item name, dining hall ID, and diet restrictions
+				item_name = str(menus[j]["name"])
+				diet_restrictions = str(", ".join(menus[j]["allergy"]))
+				
+				cursor.execute(query, (item_name, str(diningHallID), diet_restrictions)) #execute prepared statement
+	connection.commit()
+	cursor.close()
+	
+finally: #close the connections
+	if connection.is_connected():
+		connection.close()

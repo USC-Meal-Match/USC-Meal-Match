@@ -1,7 +1,3 @@
-/*
-Coded by Joey Yap
-04/09/2023
-*/
 package usc_mealmatch;
 
 import java.io.BufferedReader;
@@ -18,21 +14,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/profile-pic")
-public class ProfilePicAPI extends HttpServlet {
-	private class ProfilePicPostInput {
-		private Integer userID;
-		private String profilePicURL;
-
-		public Integer getUserID() {
-			return userID;
-		}
-
-		public String getProfilePicURL() {
-			return profilePicURL;
-		}
-	}
-
+@WebServlet("/profile")
+public class UserProfilePostAPI extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
@@ -44,10 +27,8 @@ public class ProfilePicAPI extends HttpServlet {
 			resp.setContentType("application/json");
 			resp.setHeader("Access-Control-Allow-Origin", "*");
 
-			// getting user input from the browser
 			Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
-			ProfilePicPostInput curr = gson.fromJson(in, ProfilePicPostInput.class);
+			UserProfile curr = gson.fromJson(in, UserProfile.class);
 
 			if (curr == null) {
 				resp.setStatus(400);
@@ -55,34 +36,29 @@ public class ProfilePicAPI extends HttpServlet {
 				return;
 			}
 
-			Integer userID = curr.getUserID();
-			if (userID == null) {
+			if (curr.getUserID() == null) {
 				resp.setStatus(400);
 				pw.println("{\"error\": \"User ID not provided\"}");
 				return;
 			}
 
-			String url = curr.getProfilePicURL();
-			if (url == null) {
+			if (curr.getPref() == null) {
 				resp.setStatus(400);
-				pw.println("{\"error\": \"Profile picture URL not provided\"}");
+				pw.println("{\"error\": \"User preferences not provided\"}");
 				return;
 			}
 
-			UserProfile profile = UserProfile.getUserProfile(userID);
-			if (profile == null) {
+			if (curr.getDietRstr() == null) {
 				resp.setStatus(400);
-				pw.println("{\"error\": \"User ID is invalid\"}");
+				pw.println("{\"error\": \"Diet restrictions not provided\"}");
 				return;
 			}
 
-			if (profile.setPicURL(url)) {
-				// setting status
+			if (curr.insertDatabase()) {
 				resp.setStatus(200);
 			} else {
 				resp.setStatus(400);
-				pw.println("{\"error\": \"Failed to update profile picture\"}");
-				return;
+				pw.println("{\"error\": \"User ID is invalid\"}");
 			}
 		} catch (JsonSyntaxException e) {
 			resp.setStatus(400);

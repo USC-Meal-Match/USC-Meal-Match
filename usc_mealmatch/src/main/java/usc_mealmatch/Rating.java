@@ -1,3 +1,7 @@
+/*
+Coded by Ken Xu, Joey Yap
+04/06/2023 :: UPDATED 04/09/2023
+*/
 package usc_mealmatch;
 
 import java.sql.SQLException;
@@ -48,7 +52,7 @@ public class Rating {
 			boolean success = DatabaseClient.useDatabase((connection, preparedStatement, resultSet) -> {
 				try {
 					preparedStatement = connection.prepareStatement(
-							"INSERT INTO ratings (dining_hall_id, user_id, rating_given) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE rating_given = rating_given");
+							"INSERT INTO ratings (dining_hall_id, user_id, rating_given) VALUES (?, ?, ?) as v ON DUPLICATE KEY UPDATE rating_given = v.rating_given");
 
 					preparedStatement.setInt(1, diningHallID);
 					preparedStatement.setInt(2, userID);
