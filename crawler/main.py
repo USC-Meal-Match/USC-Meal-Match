@@ -3,7 +3,7 @@ Coded by Genia Druzhinina
 04/07/2023 :: UPDATED 04/11/2023
 """
 import mysql.connector
-from main import *
+from crawl import *
 
 try:
 	connection = mysql.connector.connect(host='34.31.63.204', 
