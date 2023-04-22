@@ -3,7 +3,8 @@
 // Description: Main page
 
 import 'package:flutter/material.dart';
-import 'SignupLoginPage.dart';
+import 'package:test_flutter/HomePage.dart';
+import 'Profile.dart';
 void main() {
   runApp(const MyApp());
 }
@@ -14,8 +15,19 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: SignupLoginPage(),
+    return  MaterialApp(
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSwatch().copyWith(
+          primary: const Color(0xFF990000),
+          secondary: const Color(0xFF990000),
+
+        ),
+      ),
+      routes: {
+        '/home': (context) => HomePage(), // Define the HomePage route
+        '/profile': (context) => ProfilePage(), // Define the ProfilePage route
+      },
+      home: HomePage(),
     );
   }
 }

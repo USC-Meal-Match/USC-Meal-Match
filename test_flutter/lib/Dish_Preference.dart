@@ -2,9 +2,15 @@
 // Last Updated Date: April 2nd, 2023
 // Description: init signup page part1
 
+import 'dart:convert';
+import 'Profile_signup.dart';
 import 'package:flutter/material.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 import 'Diet_Preference.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
+import 'Dish_Preference.dart';
 
 class DishPreferencesPage extends StatefulWidget {
   const DishPreferencesPage({super.key});
@@ -15,17 +21,13 @@ class DishPreferencesPage extends StatefulWidget {
 
 class _DishPreferencesPageState extends State<DishPreferencesPage> {
   //todo: change this list to a default list afterwards
-  List<String> dishes = [
-    'Buttermilk Pancakes',
-    'Scrambled Eggs',
-    'Boiled Eggs',
-    'Bacon',
-    'Triangle Hash Browns',
-    'Turkey Maple Sausage Links',
-    'Fried Plantains',
-    'Cheese Pizza',
-    'MADE TO ORDER OMELETTES AVAILABLE UNTIL 1PM',
-  ];
+  List<String> dishes = ['Char Siu Pork', 'Harissa Lemon Roasted Chicken',
+    'Steamed Red Rice', 'Cheese Pizza', 'BBQ Pulled Pork',
+    'Chow Mein Noodles', 'Flank Steak with Broccoli',
+    'Oven Roasted Mushroom Soup', 'Beef and Pork Meatballs',
+    'Popcorn Chicken', 'Garlic Mashed Potatoes', 'Tuna Salad',
+    'Plain Green Tea Soba Noodles', 'Boston Clam Chowder', 'Chicken and Biscuits',
+    'Plain Crepe', 'Banana Pancakes', 'Oatmeal',  'Sliced Turkey', 'Corn on the Cob', 'Plain Pasta', 'Bean Sprouts'];
 
   List<String> selectedDishes = [];
 
@@ -45,7 +47,7 @@ class _DishPreferencesPageState extends State<DishPreferencesPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Error'),
-          content: Text('Please select at least 6 preferences.'),
+          content: Text('Please select at least 6 preferences to help us match the best dining hall for you.'),
           actions: <Widget>[
             TextButton(
               child: Text('OK'),
@@ -59,13 +61,13 @@ class _DishPreferencesPageState extends State<DishPreferencesPage> {
     );
   }
 
-  void _submitPreferences() {
+  void _submitPreferences() async {
     if (selectedDishes.length >= 6) {
-      // Save selected dishes to the server
-      // and navigate to the next page
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setStringList('dish', selectedDishes);
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => const DietPreferencesPage(),
+          builder: (context) =>  const DietPreferencesPage(),
         ),
       );
     } else {

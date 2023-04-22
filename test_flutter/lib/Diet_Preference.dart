@@ -2,9 +2,14 @@
 // Last Updated Date: April 2nd, 2023
 // Description: init signup page part2
 
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_flutter/HomePage.dart';
+
+import 'Profile_signup.dart';
 
 
 class DietPreferencesPage extends StatefulWidget {
@@ -16,16 +21,7 @@ class DietPreferencesPage extends StatefulWidget {
 
 class _DietPreferencesPageState extends State<DietPreferencesPage> {
   //todo: change this list to a default list afterwards
-  List<String> dishes = [
-    'Vegan',
-    'Eggs',
-    'Fish',
-    'Sesame',
-    'ShellFish',
-    'Vegetarian',
-    'Wheat/ Gluten',
-    'Pork',
-  ];
+  List<String> dishes = ['Dairy', 'Eggs', 'Fish', 'Food Not Analyzed for Allergens', 'Peanuts', 'Pork', 'Sesame', 'Shellfish', 'Soy', 'Tree Nuts', 'Vegan', 'Vegetarian', 'Wheat / Gluten'];
 
   List<String> selectedDishes = [];
 
@@ -59,14 +55,16 @@ class _DietPreferencesPageState extends State<DietPreferencesPage> {
     );
   }
 
-  void _submitPreferences() {
-    if (selectedDishes.length >= 6) {
-      //Todo:!!!
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => HomePage(),
-        ),
-      );
+  void _submitPreferences() async {
+    if (selectedDishes.length >= 0) {
+      // Save selected dishes to the server
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setStringList('diet', selectedDishes);
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => SetProfilePicturePage(),
+          ),
+        );
     } else {
       _showAlertDialog();
     }
@@ -91,6 +89,7 @@ class _DietPreferencesPageState extends State<DietPreferencesPage> {
                       (dish) => ChoiceChip(
                     label: Text(dish),
                     selected: selectedDishes.contains(dish),
+                        selectedColor: Colors.green,
                     onSelected: (_) => _toggleDish(dish),
                   ),
                 )
